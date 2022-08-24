@@ -13,10 +13,14 @@ na.by.columns <- function(data, visual = 'graph'){
   
   plot <- all_na %>% 
     ggplot(aes(x = na_percent, y = column)) +
-    geom_bar(stat = 'identity') + 
+    geom_bar(stat = 'identity', fill = 'darkred') + 
     scale_x_continuous(expand = c(0, 0)) + 
-    ggtitle('NA% in each column')
-  
+    ggtitle('NA% in each column') +
+    theme(plot.background  = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks.y = element_blank())
+      
   if(visual == 'graph'){return(plot)}
   else if(visual == 'matrix'){return(all_na)}
   else if(visual == 'both'){return(list('graph' = plot, 'matrix' = all_na))}
@@ -40,7 +44,11 @@ target.proportion.na <- function(data, target, visual = 'graph'){
   
   plot <- predictor_na %>% 
     ggplot(aes_string(x = 'na_percent', y = 'column', label = 'group_count', fill = target)) +
-    geom_bar(stat = 'identity')
+    geom_bar(stat = 'identity') +
+    theme(plot.background  = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks.y = element_blank())
   
   if(visual == 'graph'){return(plot)}
   else if(visual == 'matrix'){return(predictor_na)}
@@ -48,7 +56,7 @@ target.proportion.na <- function(data, target, visual = 'graph'){
   else{message('Error: options for visual are graph, matrix or both')}
 }
 
-## Missing values by target: Shows the proportion of na/nonan in each
+## Missing values by target: Shows the proportion of NA/non-NA in each
 ## class of the target
 na.by.target <- function(data, target, visual = 'graph'){
   predictor_na_label <- data %>%
@@ -67,7 +75,11 @@ na.by.target <- function(data, target, visual = 'graph'){
     ggplot(aes(x = na_percent, y = column, label = group_count, fill = Is_NA)) +
     geom_bar(stat = 'identity') + facet_grid(reformulate(target))  + 
     scale_fill_manual(values = c('gray','darkred')) + 
-    scale_x_continuous(breaks = c(50,100))
+    scale_x_continuous(breaks = c(50,100)) +
+    theme(plot.background  = element_blank(),
+          panel.background = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks.y = element_blank())
   
   if(visual == 'graph'){return(plot)}
   else if(visual == 'matrix'){return(predictor_na)}
