@@ -1,2 +1,2 @@
 # Exploratory-code
-Functions to make easier the exploratory analysis
+Functions to make easier the exploratory analysis in R
