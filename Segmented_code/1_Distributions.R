@@ -1,8 +1,7 @@
 # Distributions: This code chunk is to build functions 
 #                to visualize the distributions of each variable
 library(pacman)
-p_load(MASS, tidyverse, caret, corrplot, mlbench, e1071, ggridges, rlang,
-       tidytext)
+p_load(ggridges, tidyverse, e1071)
 
 ## Variables distribution
 ### This function will identify the type of each variable
@@ -90,12 +89,15 @@ plot.factors <- function(data, factor_variable){
       summarise(percent = round(n()/mean(total)*100, 1),
                 no_rows = n()) %>% 
       ungroup()  %>%
+      rename('variable' = name) %>%
       mutate(maximum = max(no_rows),
              ratio = round(maximum/no_rows, 2),
-             labels = paste0('n =', no_rows, '; ratio =', ' ', ratio))
+             labels = paste0('n =', no_rows, '; ratio =', ' ', ratio),
+             variable = fct_reorder(variable, percent))
+      
     
     plot <- data_summary %>% 
-      ggplot(aes_string(x = 'percent', y = name, label = 'labels')) +
+      ggplot(aes_string(x = 'percent', y = 'variable', label = 'labels')) +
       geom_bar(stat = 'identity', fill =ifelse(data_summary$percent < 10, 'darkred', 'darkgray'))  + 
       geom_text(hjust = ifelse(data_summary$percent <= 10, -0.2, 1.5 ),
                 color = ifelse(data_summary$ratio >= 20, 'darkred', 
