@@ -27,7 +27,6 @@ na.by.columns <- function(data, visual = 'graph'){
   else{message('Error: options for visual are graph, matrix or both')}
 }
 
-
 ## Proportion of Missing values belonging to each class of the target
 target.proportion.na <- function(data, target, visual = 'graph'){
   

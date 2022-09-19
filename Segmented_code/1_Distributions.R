@@ -1,7 +1,8 @@
 # Distributions: This code chunk is to build functions 
 #                to visualize the distributions of each variable
 library(pacman)
-p_load(MASS, tidyverse, caret, corrplot, mlbench, e1071, ggridges)
+p_load(MASS, tidyverse, caret, corrplot, mlbench, e1071, ggridges, rlang,
+       tidytext)
 
 ## Variables distribution
 ### This function will identify the type of each variable
@@ -13,7 +14,8 @@ variable.types <- function(data){
   character_variable <- vector()
 
   for(name in colnames(data)){
-    if(class(data[name][[1]]) %in% c('ordered', 'factor')){
+    
+    if(class(data[name][[1]])[1] %in% c('ordered', 'factor')){
       factor_variable <- c(factor_variable, name)
     }
     else if(class(data[name][[1]]) %in% c('numeric', 'integer')){
@@ -90,11 +92,10 @@ plot.factors <- function(data, factor_variable){
       ungroup()  %>%
       mutate(maximum = max(no_rows),
              ratio = round(maximum/no_rows, 2),
-             labels = paste0('n =', no_rows, '; ratio =', ' ', ratio),
-             factors = fct_reorder(factor_levels, percent, .desc = FALSE))
+             labels = paste0('n =', no_rows, '; ratio =', ' ', ratio))
     
     plot <- data_summary %>% 
-      ggplot(aes_string(x = 'percent', y = 'factors', label = 'labels')) +
+      ggplot(aes_string(x = 'percent', y = name, label = 'labels')) +
       geom_bar(stat = 'identity', fill =ifelse(data_summary$percent < 10, 'darkred', 'darkgray'))  + 
       geom_text(hjust = ifelse(data_summary$percent <= 10, -0.2, 1.5 ),
                 color = ifelse(data_summary$ratio >= 20, 'darkred', 
@@ -105,7 +106,7 @@ plot.factors <- function(data, factor_variable){
       xlab('Percentage (%)') +
       theme(panel.background = element_blank(),
             axis.title.y = element_blank())
-    
+
     print(plot)
   }
 }
